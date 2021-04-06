@@ -1,1 +1,0 @@
-web: gunicorn Planner.wsgi --log-file -
