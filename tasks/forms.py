@@ -12,3 +12,10 @@ class CreateTaskForm(ModelForm):
         model = Task
         fields = ['name', 'description', 'type', 'deadline']
         widgets = {'deadline': DateInput}
+
+
+class EditTaskForm(ModelForm):
+    class Meta:
+        model = Task
+        fields = ['name', 'description', 'deadline', 'id']
+        widgets = {'deadline': DateInput}
