@@ -54,3 +54,11 @@ class EditTask(LoginRequiredMixin, View):
             task.deadline = formData.cleaned_data['deadline']
             task.save()
         return HttpResponseRedirect('/tasks')
+
+
+class DeleteTask(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+
+    def get(self, request):
+        Task.objects.get(id=request.GET['id']).delete()
+        return HttpResponseRedirect('/tasks')

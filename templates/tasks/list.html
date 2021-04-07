@@ -27,7 +27,11 @@
                             <div>
                                 <div><b>{{ task.name }}</b></div>
                                 <div>{{ task.deadline }}</div>
-                                <div><a href="/tasks/edit/?id={{ task.id }}">edit</a> <div>
+                                <div>
+                                    <a href="/tasks/edit/?id={{ task.id }}">edit</a>
+                                    <a href="/tasks/delete/?id={{ task.id }}">delete</a>
+
+                                </div>
                             </div>
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapse{{ task.id }}" aria-expanded="false"
