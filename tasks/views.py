@@ -28,7 +28,7 @@ class addTasks(LoginRequiredMixin, View):
     def post(self, request):
         submittedForm = CreateTaskForm(request.POST)
         if submittedForm.is_valid():
-            task = Task(**submittedForm.cleaned_data)
+            task = submittedForm.save(commit=False)
             task.user = self.request.user
             print(task.name, task.deadline)
             task.save()
