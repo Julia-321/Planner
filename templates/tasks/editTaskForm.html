@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <form action="" method="post">
+    <form action="{% url "edit_task" %}" method="post">
         {% csrf_token %}
         {{ form }}
         <input type="hidden" name="id" value="{{ task_id }}">

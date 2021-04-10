@@ -16,15 +16,15 @@ class ShowTasks(LoginRequiredMixin, View):
         context = {
             'tasks': tasks
         }
-        return render(request, 'tasks/list.html', context=context)
+        return render(self.request, 'tasks/list.html', context=context)
 
 
 class AddTask(LoginRequiredMixin, View):
-    login_url = '/accounts/login/' # TODO idk what is this, copy paste
+    login_url = '/accounts/login/'
 
     def get(self, request):
         form = CreateTaskForm()
-        return render(request, 'tasks/addTaskForm.html', context={'form': form})
+        return render(self.request, 'tasks/addTaskForm.html', context={'form': form})
 
     def post(self, request):
         formData = CreateTaskForm(request.POST)
@@ -43,12 +43,12 @@ class EditTask(LoginRequiredMixin, View):
 
     def get(self, request):
         form = EditTaskForm(instance=Task.objects.get(id=request.GET['id']))
-        return render(request, 'tasks/editTaskForm.html', context={'form': form, 'task_id': request.GET['id']})
+        return render(self.request, 'tasks/editTaskForm.html', context={'form': form, 'task_id': request.GET['id']})
 
     def post(self, request):
-        formData = EditTaskForm(request.POST)
+        formData = EditTaskForm(self.request.POST)
         if formData.is_valid():
-            task = Task.objects.get(id=request.POST['id'])
+            task = Task.objects.get(id=self.request.POST['id'])
             task.name = formData.cleaned_data['name']
             task.description = formData.cleaned_data['description']
             task.deadline = formData.cleaned_data['deadline']
@@ -60,5 +60,5 @@ class DeleteTask(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
-        Task.objects.get(id=request.GET['id']).delete()
+        Task.objects.get(id=self.request.GET['id']).delete()
         return HttpResponseRedirect('/tasks')

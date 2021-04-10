@@ -4,8 +4,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('', ShowTasks.as_view(), name='list_view'),
-    path('add/', AddTask.as_view()),
-    path('edit/', EditTask.as_view()),
-    path('delete/', DeleteTask.as_view())
+    path('add/', AddTask.as_view(), name='add_task'),
+    path('edit/', EditTask.as_view(), name='edit_task'),
+    path('delete/', DeleteTask.as_view(), name='delete_task')
 
 ]
