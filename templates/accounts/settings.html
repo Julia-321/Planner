@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if saved %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Saved!</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+
+    <form action="{% url 'settings' %}" method="post">
+
+        {% csrf_token %}
+
+        {{ form }}
+
+
+        <input type="submit" class="btn btn-success" value="Save">
+    </form>
+
+{% endblock content %}

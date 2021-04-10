@@ -19,6 +19,19 @@ class ShowTasks(LoginRequiredMixin, View):
         return render(self.request, 'tasks/list.html', context=context)
 
 
+class ShowTasksDaily(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+    # redirect_field_name = 'redirect_to'
+
+    def get(self, request):
+        tasks = Task.objects.filter(user=self.request.user)
+        print(tasks)
+        context = {
+            'tasks': tasks
+        }
+        return render(self.request, 'tasks/daily.html', context=context)
+
+
 class AddTask(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
