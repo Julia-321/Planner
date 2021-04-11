@@ -1,0 +1,15 @@
+<div class="d-flex flex-row-reverse">
+    <form method="post" action='{% url 'list_view' %}'>
+
+        {% csrf_token %}
+
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <button type="submit" class="btn btn-primary {% if checked == 'Daily' %} active {% endif %}" name="daily"> Daily </button>
+            <button type="submit" class="btn btn-primary {% if checked == 'Weekly' %} active {% endif %}" name="weekly"> Weekly </button>
+            <button type="submit" class="btn btn-primary {% if checked == 'Monthly' %} active {% endif %}" name="monthly"> Monthly </button>
+
+        </div>
+    </form>
+</div>
+
+<br>

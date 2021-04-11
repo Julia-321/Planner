@@ -8,4 +8,6 @@ urlpatterns = [
     path('edit/', EditTask.as_view(), name='edit_task'),
     path('delete/', DeleteTask.as_view(), name='delete_task'),
     path('daily/', ShowTasksDaily.as_view(), name='show_tasks_daily'),
+    path('weekly/', ShowTasksWeekly.as_view(), name='show_tasks_weekly'),
+    path('monthly/', ShowTasksMonthly.as_view(), name='show_tasks_monthly'),
 ]

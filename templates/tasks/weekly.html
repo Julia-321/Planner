@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    All tasks
+    Daily tasks
 {% endblock %}
 
 {% block content %}
-    <h3>All Tasks</h3>
+
+    {% include 'tasks/nav_tasks.html' %}
+
+    <h3>Weekly tasks</h3>
 
     <div>
         <a href="/tasks/add"> Add a new task </a>

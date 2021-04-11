@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from tasks.models import Task
 from tasks.forms import *
+from tasks import services
+from accounts.consts import HOME_PAGE_DICT
 
 
 class ShowTasks(LoginRequiredMixin, View):
@@ -11,25 +12,27 @@ class ShowTasks(LoginRequiredMixin, View):
     # redirect_field_name = 'redirect_to'
 
     def get(self, request):
-        tasks = Task.objects.filter(user=self.request.user)
-        print(tasks)
-        context = {
-            'tasks': tasks
-        }
-        return render(self.request, 'tasks/list.html', context=context)
+        profile = self.request.user.profile
+        self.request.session['checked'] = HOME_PAGE_DICT[self.request.user.profile.home_view]
+        if profile.home_view == 1:
+            return redirect('show_tasks_daily')
+        elif profile.home_view == 2:
+            return redirect('show_tasks_weekly')
+        elif profile.home_view == 3:
+            return redirect('show_tasks_monthly')
 
+    def post(self, request):
+        # print(self.request.POST)
 
-class ShowTasksDaily(LoginRequiredMixin, View):
-    login_url = '/accounts/login/'
-    # redirect_field_name = 'redirect_to'
-
-    def get(self, request):
-        tasks = Task.objects.filter(user=self.request.user)
-        print(tasks)
-        context = {
-            'tasks': tasks
-        }
-        return render(self.request, 'tasks/daily.html', context=context)
+        if 'daily' in request.POST:
+            self.request.session['checked'] = 'Daily'
+            return redirect('show_tasks_daily')
+        elif 'weekly' in request.POST:
+            self.request.session['checked'] = 'Weekly'
+            return redirect('show_tasks_weekly')
+        elif 'monthly' in request.POST:
+            self.request.session['checked'] = 'Monthly'
+            return redirect('show_tasks_monthly')
 
 
 class AddTask(LoginRequiredMixin, View):
@@ -75,3 +78,40 @@ class DeleteTask(LoginRequiredMixin, View):
     def get(self, request):
         Task.objects.get(id=self.request.GET['id']).delete()
         return HttpResponseRedirect('/tasks')
+
+
+class ShowTasksDaily(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+
+    def get(self, request):
+        # print(self.request.session['checked'])
+        tasks = services.get_tasks_daily(self.request)
+        context = {
+            'tasks': tasks,
+            'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
+        }
+        return render(self.request, 'tasks/daily.html', context=context)
+
+
+class ShowTasksWeekly(LoginRequiredMixin, View):
+    login_url = 'accounts/login'
+
+    def get(self, request):
+        tasks = services.get_tasks_weekly(self.request)
+        context = {
+            'tasks': tasks,
+            'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
+        }
+        return render(self.request, 'tasks/weekly.html', context=context)
+
+
+class ShowTasksMonthly(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+
+    def get(self, request):
+        tasks = services.get_tasks_monthly(self.request)
+        context = {
+            'tasks': tasks,
+            'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
+        }
+        return render(self.request, 'tasks/monthly.html', context=context)

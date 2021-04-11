@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
     {% if form.errors %}
@@ -13,6 +14,7 @@
             <p>Please login to see this page.</p>
         {% endif %}
     {% endif %}
+
     <form method="post" action=".">
         {% csrf_token %}
         {{ form.as_p }}
@@ -21,6 +23,6 @@
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
 
-<p>Forgot password? <a href="{% url 'password_reset' %}">Reset it</a>!</p>
+    <p>Forgot password? <a href="{% url 'password_reset' %}">Reset it</a>!</p>
 
 {% endblock %}

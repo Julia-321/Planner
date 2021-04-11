@@ -1,16 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add task</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Add task
+{% endblock %}
+
+{% block content %}
+
+    <p>Add new task</p>
 
     <form action="{% url "add_task" %}" method="post">
         {% csrf_token %}
-        {{ form }}
+
+        <table>
+            <tr>
+                <td>{{ form.name.label_tag }}</td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.description.label_tag }}</td>
+                <td>{{ form.description }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.type.label_tag }}</td>
+                <td>{{ form.type }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.deadline.label_tag }}</td>
+                <td>{{ form.deadline }}</td>
+            </tr>
+        </table>
+
         <input type="submit" value="Submit">
     </form>
 
-</body>
-</html>
+{% endblock %}

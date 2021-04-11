@@ -1,17 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit task {{ task_id }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Add task
+{% endblock %}
+
+{% block content %}
+    <p>Edit task</p>
 
     <form action="{% url "edit_task" %}" method="post">
         {% csrf_token %}
-        {{ form }}
+        <table>
+            <tr>
+                <td>{{ form.name.label_tag }}</td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.description.label_tag }}</td>
+                <td>{{ form.description }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.deadline.label_tag }}</td>
+                <td>{{ form.deadline }}</td>
+            </tr>
+        </table>
         <input type="hidden" name="id" value="{{ task_id }}">
         <input type="submit" value="Submit">
     </form>
 
-</body>
-</html>
+{% endblock %}
