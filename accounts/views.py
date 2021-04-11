@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views import View
 from accounts.forms import SettingsForm
 from accounts import services
+from django_registration.backends.one_step.views import RegistrationView
+from accounts.models import Profile
 
 
 class SettingsView(View):
@@ -25,3 +27,12 @@ class SettingsView(View):
         }
 
         return render(self.request, 'accounts/settings.html', context=context)
+
+
+class SignUpView(RegistrationView):
+
+    def register(self, form):
+        new_user = super(SignUpView, self).register(form)
+        new_profile = Profile(user=new_user)
+        new_profile.save()
+        return new_user
