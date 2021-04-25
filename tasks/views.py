@@ -1,38 +1,64 @@
-from django.http import HttpResponseRedirect
+from django.utils import timezone
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks.forms import *
 from tasks import services
 from accounts.consts import HOME_PAGE_DICT
+from django.urls import reverse
 
 
 class ShowTasks(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
-    # redirect_field_name = 'redirect_to'
 
     def get(self, request):
+        year = timezone.now().year
+        month = timezone.now().month
+        day = timezone.now().day
+        kwargs = {'year': year, 'month': month, 'day': day}
+        # print(year, month, day)
         profile = self.request.user.profile
         self.request.session['checked'] = HOME_PAGE_DICT[self.request.user.profile.home_view]
         if profile.home_view == 1:
-            return redirect('show_tasks_daily')
+            return redirect(reverse('show_tasks_daily', kwargs=kwargs))
         elif profile.home_view == 2:
-            return redirect('show_tasks_weekly')
+            return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
         elif profile.home_view == 3:
-            return redirect('show_tasks_monthly')
+            return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
-    def post(self, request):
+    def post(self, request, year, month, day):
         # print(self.request.POST)
+        # year = timezone.now().year
+        # month = timezone.now().month
+        # day = timezone.now().day
+        kwargs = {'year': year, 'month': month, 'day': day}
 
-        if 'daily' in request.POST:
+        print(request.POST)
+
+        if 'daily' in self.request.POST or request.POST.get('cur') == 'Daily':
             self.request.session['checked'] = 'Daily'
-            return redirect('show_tasks_daily')
-        elif 'weekly' in request.POST:
+
+            if 'next' in request.POST:
+                kwargs = {'year': year, 'month': month, 'day': day + 1}
+            if 'prev' in request.POST:
+                kwargs = {'year': year, 'month': month, 'day': day - 1}
+
+            return redirect(reverse('show_tasks_daily', kwargs=kwargs))
+        elif 'weekly' in self.request.POST or request.POST.get('cur') == 'Weekly':
             self.request.session['checked'] = 'Weekly'
-            return redirect('show_tasks_weekly')
-        elif 'monthly' in request.POST:
+            if 'next' in request.POST:
+                kwargs = {'year': year, 'month': month, 'day': day + 7}
+            if 'prev' in request.POST:
+                kwargs = {'year': year, 'month': month, 'day': day - 7}
+            return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
+        elif 'monthly' in self.request.POST or request.POST.get('cur') == 'Monthly':
             self.request.session['checked'] = 'Monthly'
-            return redirect('show_tasks_monthly')
+            if 'next' in request.POST:
+                kwargs = {'year': year, 'month': month + 1, 'day': day}
+            if 'prev' in request.POST:
+                kwargs = {'year': year, 'month': month - 1, 'day': day}
+            return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
 
 class AddTask(LoginRequiredMixin, View):
@@ -83,10 +109,11 @@ class DeleteTask(LoginRequiredMixin, View):
 class ShowTasksDaily(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
-    def get(self, request):
-        # print(self.request.session['checked'])
-        tasks = services.get_tasks_daily(self.request)
+    def get(self, request, year, month, day):
+        cur_date = services.get_date_obj(year, month, day)
+        tasks = services.get_tasks_daily(self.request, cur_date)
         context = {
+            'date': cur_date,
             'tasks': tasks,
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
         }
@@ -96,9 +123,12 @@ class ShowTasksDaily(LoginRequiredMixin, View):
 class ShowTasksWeekly(LoginRequiredMixin, View):
     login_url = 'accounts/login'
 
-    def get(self, request):
-        tasks = services.get_tasks_weekly(self.request)
+    def get(self, request, year, month, day):
+        cur_date = services.get_date_obj(year, month, day)
+
+        tasks = services.get_tasks_weekly(self.request, cur_date)
         context = {
+            'date': cur_date,
             'tasks': tasks,
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
         }
@@ -108,9 +138,12 @@ class ShowTasksWeekly(LoginRequiredMixin, View):
 class ShowTasksMonthly(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
-    def get(self, request):
-        tasks = services.get_tasks_monthly(self.request)
+    def get(self, request, year, month, day):
+        cur_date = services.get_date_obj(year, month, day)
+
+        tasks = services.get_tasks_monthly(self.request, cur_date)
         context = {
+            'date': cur_date,
             'tasks': tasks,
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
         }

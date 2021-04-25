@@ -1,0 +1,23 @@
+<div class="d-flex flex-row-reverse">
+
+    <form action="{% url 'list_view' year=date.year month=date.month day=date.day %}" method="post">
+
+        {% csrf_token %}
+
+        <input type="hidden" name="cur" value="{{ checked }}">
+
+
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+
+
+            <button type="submit" class="btn btn-primary"  name="next"> Next </button>
+
+            <button type="submit"  class="btn btn-primary" name="prev"> Previously </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<br>
