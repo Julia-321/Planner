@@ -40,23 +40,29 @@ class ShowTasks(LoginRequiredMixin, View):
             self.request.session['checked'] = 'Daily'
 
             if 'next' in request.POST:
+                # todo function add_day(year, month, day)
                 kwargs = {'year': year, 'month': month, 'day': day + 1}
             if 'prev' in request.POST:
+                # todo function sub_day(year, month, day)
                 kwargs = {'year': year, 'month': month, 'day': day - 1}
 
             return redirect(reverse('show_tasks_daily', kwargs=kwargs))
         elif 'weekly' in self.request.POST or request.POST.get('cur') == 'Weekly':
             self.request.session['checked'] = 'Weekly'
             if 'next' in request.POST:
+                # todo function add_week(year, month, day)
                 kwargs = {'year': year, 'month': month, 'day': day + 7}
             if 'prev' in request.POST:
+                # todo function sub_week(year, month, day)
                 kwargs = {'year': year, 'month': month, 'day': day - 7}
             return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
         elif 'monthly' in self.request.POST or request.POST.get('cur') == 'Monthly':
             self.request.session['checked'] = 'Monthly'
             if 'next' in request.POST:
+                # todo function add_month(year, month, day)
                 kwargs = {'year': year, 'month': month + 1, 'day': day}
             if 'prev' in request.POST:
+                # todo function sub_month(year, month, day)
                 kwargs = {'year': year, 'month': month - 1, 'day': day}
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
