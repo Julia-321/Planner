@@ -31,4 +31,4 @@ urlpatterns = [
 ]
 
 # username: test_user
-# pass:     test_pass
+# pass:     test_password
