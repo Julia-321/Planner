@@ -128,3 +128,13 @@ LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'valentine.spammer@gmail.com'
+
+EMAIL_HOST_PASSWORD = 'v05022000'
+
+EMAIL_PORT = 587
