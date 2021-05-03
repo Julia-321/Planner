@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -11,7 +13,7 @@ class Task(models.Model):
     description = models.CharField(verbose_name='Description', max_length=2000, blank=True)
     type = models.IntegerField('Event or Task', choices=((0, "Event"), (1, "Task")))
     created = models.DateTimeField(verbose_name='Creation date time', auto_now=True)
-    deadline = models.DateTimeField(verbose_name='Task deadline', blank=True, null=True)
+    deadline = models.DateTimeField(verbose_name='Task deadline', default=timezone.now)
     complete = models.BooleanField(verbose_name='Complete', default=False)
 
     class Meta:

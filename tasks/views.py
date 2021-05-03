@@ -1,18 +1,31 @@
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks.forms import *
 from tasks import services
 from accounts.consts import HOME_PAGE_DICT
 from django.urls import reverse
+from webpush import send_user_notification
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
+import pync
+from pywebpush import webpush
 
 
 class ShowTasks(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
+    @csrf_exempt
     def get(self, request):
+
+        payload = {'head': 'head_data', 'body': 'body_data'}
+        user = User.objects.get(id=self.request.user.id)
+        send_user_notification(user=user, payload=payload, ttl=1000)
+        print(user, type(user))
+        pync.notify('Hello World', title='Python')
         year = timezone.now().year
         month = timezone.now().month
         day = timezone.now().day
@@ -146,7 +159,6 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
 
     def get(self, request, year, month, day):
         cur_date = services.get_date_obj(year, month, day)
-
         tasks = services.get_tasks_monthly(self.request, cur_date)
         context = {
             'date': cur_date,

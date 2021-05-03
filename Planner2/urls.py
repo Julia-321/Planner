@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
@@ -20,6 +21,7 @@ from django_registration.backends.one_step.views import RegistrationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^webpush/', include('webpush.urls')),
     path('tasks/', include('tasks.urls')),
     path('accounts/register/',
          RegistrationView.as_view(),
