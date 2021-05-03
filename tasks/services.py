@@ -25,7 +25,7 @@ def get_tasks_weekly(request, date):
 def get_tasks_monthly(request, date):
     today = date
     start = today.replace(day=1)
-    end = today.replace(month=today.month+1).replace(day=1) - timedelta(days=1)
+    end = today.replace(day=1).replace(month=today.month+1) - timedelta(days=1)
 
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
                                 deadline__day__range=[start.day, end.day]).order_by('deadline')
