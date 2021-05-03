@@ -12,6 +12,7 @@ class Task(models.Model):
     type = models.IntegerField('Event or Task', choices=((0, "Event"), (1, "Task")))
     created = models.DateTimeField(verbose_name='Creation date time', auto_now=True)
     deadline = models.DateTimeField(verbose_name='Task deadline', blank=True, null=True)
+    complete = models.BooleanField(verbose_name='Complete', default=False)
 
     class Meta:
         ordering = ['created']
