@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <style>
+        #login-div {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        #reset-link {
+            color: #6c757d;
+        }
+
+        #id_password {
+            width: 100%;
+        }
+        #id_username {
+            width: 100%;
+        }
+    </style>
 
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
@@ -15,14 +33,45 @@
         {% endif %}
     {% endif %}
 
-    <form method="post" action=".">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <div class="container">
+        <div class="row justify-content-around">
 
-        <input type="submit" value="Log in" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+            <div class="col-4 align-self-center" id="login-div">
+                <form method="post" action=".">
+                    {% csrf_token %}
 
-    <p>Forgot password? <a href="{% url 'password_reset' %}">Reset it</a>!</p>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text w-100" id="basic-addon1">Username &nbsp;
+                            <span class="w-100">{{ form.username }} </span>
+                        </span>
+                    </div>
+
+
+
+                    <div class="input-group mb-3">
+
+                        <span class="input-group-text w-100" id="basic-addon1">Password &nbsp;&nbsp;
+                            {{ form.password }} </span>
+
+                    </div>
+
+
+                    <figure class="text-center">
+                        <input class="btn btn-outline-secondary" type="submit" value="Log in" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </figure>
+                </form>
+
+{#                <p><br></p>#}
+                <figure class="text-center">
+                    <small class="text-muted">
+                        Forgot password? <a id="reset-link" href="{% url 'password_reset' %}">Reset it</a>!
+                    </small>
+                </figure>
+
+            </div>
+
+        </div>
+    </div>
 
 {% endblock %}
