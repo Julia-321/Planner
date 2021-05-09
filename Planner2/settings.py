@@ -139,3 +139,5 @@ EMAIL_HOST_USER = 'valentine.spammer@gmail.com'
 EMAIL_HOST_PASSWORD = 'v05022000'
 
 EMAIL_PORT = 587
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
