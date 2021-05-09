@@ -40,10 +40,7 @@ class ShowTasks(LoginRequiredMixin, View):
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
     def post(self, request, year, month, day):
-        # print(self.request.POST)
-        # year = timezone.now().year
-        # month = timezone.now().month
-        # day = timezone.now().day
+
         kwargs = {'year': year, 'month': month, 'day': day}
         cur_date = datetime.date(year=year, month=month, day=day)
         print(request.POST)
@@ -57,6 +54,10 @@ class ShowTasks(LoginRequiredMixin, View):
             if 'prev' in request.POST:
                 res_date = cur_date + relativedelta(days=-1)
                 kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
 
             return redirect(reverse('show_tasks_daily', kwargs=kwargs))
         elif 'weekly' in self.request.POST or request.POST.get('cur') == 'Weekly':
@@ -165,3 +166,4 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
         }
         return render(self.request, 'tasks/monthly.html', context=context)
+
