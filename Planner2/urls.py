@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django_registration.backends.one_step.views import RegistrationView
+from Planner2.views import not_implemented
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +30,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('accounts.urls')),
     path('', RedirectView.as_view(url='/tasks/', permanent=True)),
+    path('not_implemented/', not_implemented, name="not_implemented"),
 ]
 
 # username: test_user
