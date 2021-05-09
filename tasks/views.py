@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+import datetime
+from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -11,8 +13,6 @@ from django.urls import reverse
 from webpush import send_user_notification
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
-import pync
-from pywebpush import webpush
 
 
 class ShowTasks(LoginRequiredMixin, View):
@@ -25,7 +25,6 @@ class ShowTasks(LoginRequiredMixin, View):
         user = User.objects.get(id=self.request.user.id)
         send_user_notification(user=user, payload=payload, ttl=1000)
         print(user, type(user))
-        pync.notify('Hello World', title='Python')
         year = timezone.now().year
         month = timezone.now().month
         day = timezone.now().day
@@ -46,37 +45,37 @@ class ShowTasks(LoginRequiredMixin, View):
         # month = timezone.now().month
         # day = timezone.now().day
         kwargs = {'year': year, 'month': month, 'day': day}
-
+        cur_date = datetime.date(year=year, month=month, day=day)
         print(request.POST)
 
         if 'daily' in self.request.POST or request.POST.get('cur') == 'Daily':
             self.request.session['checked'] = 'Daily'
 
             if 'next' in request.POST:
-                # todo function add_day(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day + 1}
+                res_date = cur_date + relativedelta(days=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_day(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day - 1}
+                res_date = cur_date + relativedelta(days=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
 
             return redirect(reverse('show_tasks_daily', kwargs=kwargs))
         elif 'weekly' in self.request.POST or request.POST.get('cur') == 'Weekly':
             self.request.session['checked'] = 'Weekly'
             if 'next' in request.POST:
-                # todo function add_week(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day + 7}
+                res_date = cur_date + relativedelta(weeks=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_week(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day - 7}
+                res_date = cur_date + relativedelta(weeks=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
         elif 'monthly' in self.request.POST or request.POST.get('cur') == 'Monthly':
             self.request.session['checked'] = 'Monthly'
             if 'next' in request.POST:
-                # todo function add_month(year, month, day)
-                kwargs = {'year': year, 'month': month + 1, 'day': day}
+                res_date = cur_date + relativedelta(months=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_month(year, month, day)
-                kwargs = {'year': year, 'month': month - 1, 'day': day}
+                res_date = cur_date + relativedelta(months=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
 
