@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <style>
+    .centered-option-block {
+        padding-top: calc(.375rem + 1px);
+        padding-bottom: calc(.375rem + 1px);
+    }
+
+    #id_notification_option {
+        width: 100%;
+    }
+    #id_home_view {
+        width: 100%;
+    }
+    #id_theme {
+        width: 100%;
+    }
+    #id_date_view {
+        width: 100%;
+    }
+
+    </style>
+
 
     {% if saved %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -9,15 +30,59 @@
         </div>
     {% endif %}
 
-    <a href="{% url 'change_password' %}">Change password</a>
+    <div class="container">
+        <h3>User settings</h3>
+        <p>To change your account settings select desirable options below and click on <b>Save</b> button.</p>
+        <form action="{% url 'settings' %}" method="post">
 
-    <form action="{% url 'settings' %}" method="post">
+            {% csrf_token %}
+            <div class="container text-center">
+                <div class="mb-3 row justify-content-md-center">
+                    <label for="notificationOption" class="col-sm-2 col-form-label">Notification option</label>
+                    <div class="col-sm-2">
+                        <div class="centered-option-block">
+                            {{ form.notification_option }}
+                        </div>
+                    </div>
+                </div>
 
-        {% csrf_token %}
+                <div class="mb-3 row justify-content-md-center">
+                    <label for="homeView" class="col-sm-2 col-form-label">Home view</label>
+                    <div class="col-sm-2">
+                        <div class="centered-option-block">
+                            {{ form.home_view }}
+                        </div>
+                    </div>
+                </div>
 
-        {{ form.as_p }}
+                <div class="mb-3 row justify-content-md-center">
+                    <label for="theme" class="col-sm-2 col-form-label">Theme</label>
+                    <div class="col-sm-2">
+                        <div class="centered-option-block">
+                            {{ form.theme }}
+                        </div>
+                    </div>
+                </div>
 
-        <input type="submit" class="btn btn-success" value="Save">
-    </form>
+                <div class="mb-3 row justify-content-md-center">
+                    <label for="dateView" class="col-sm-2 col-form-label">Date view</label>
+                    <div class="col-sm-2">
+                        <div class="centered-option-block">
+                            {{ form.date_view }}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-secondary" value="Save">
+            </div>
+        </form>
+
+
+        <h3>Change password</h3>
+        <p>To change your password click on <b>Change password</b> button below.</p>
+        <div class="container text-center">
+            <a class="btn btn-danger" role="button" href="{% url 'change_password' %}">Change password</a>
+        </div>
+    </div>
 
 {% endblock content %}
