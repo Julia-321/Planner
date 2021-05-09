@@ -25,8 +25,8 @@
                 <td>{{ form.type }}</td>
             </tr>
             <tr>
-                <td>{{ form.deadline.label_tag }}</td>
-                <td>{{ form.deadline }}</td>
+                <td><label for="id_deadline">{{ form.deadline.label_tag }}</label></td>
+                <td><input type="date" name="deadline" id="id_deadline" required pattern="\d{4}-\d{2}-\d{2}"></td>
             </tr>
         </table>
 
