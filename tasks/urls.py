@@ -12,4 +12,5 @@ urlpatterns = [
     path('daily/<int:year>/<int:month>/<int:day>/', ShowTasksDaily.as_view(), name='show_tasks_daily'),
     path('weekly/<int:year>/<int:month>/<int:day>/', ShowTasksWeekly.as_view(), name='show_tasks_weekly'),
     path('monthly/<int:year>/<int:month>/<int:day>/', ShowTasksMonthly.as_view(), name='show_tasks_monthly'),
+    path('push/', PushView.as_view(), name='push_view'),
 ]
