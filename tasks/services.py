@@ -38,11 +38,6 @@ def get_tasks_monthly(request, date):
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
                                 deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
 
-    # cur = start
-    # res = []
-    # while cur <= end:
-    #     res += [(DAYS[cur.weekday()], f'{MONTHS[cur.month - 1]} {cur.day}', tasks.filter(deadline__day=cur.day))]
-    #     cur += timedelta(days=1)
     res = Calendar().monthdayscalendar(today.year, today.month)
 
     return list(map(lambda item: list(map(lambda x: (x, tasks.filter(deadline__day=x)) if x else (x, []), item)), res))
