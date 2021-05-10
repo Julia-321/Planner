@@ -17,9 +17,9 @@ class ShowTasks(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
-        year = timezone.now().year
-        month = timezone.now().month
-        day = timezone.now().day
+        year = timezone.localtime(timezone.now()).year
+        month = timezone.localtime(timezone.now()).month
+        day = timezone.localtime(timezone.now()).day
         kwargs = {'year': year, 'month': month, 'day': day}
         # print(year, month, day)
         profile = self.request.user.profile
@@ -107,7 +107,7 @@ class AddTaskView(LoginRequiredMixin, View):
                             name=title,
                             description=description,
                             type=task_type,
-                            deadline=timezone.datetime.combine(deadline_date, deadline_time) or timezone.now())
+                            deadline=timezone.datetime.combine(deadline_date, deadline_time) or timezone.localtime(timezone.now()))
         return redirect('list_view')
 
 
@@ -237,7 +237,7 @@ class PushView(LoginRequiredMixin, View):
     login_url = 'accounts/login'
 
     def get(self, request):
-        date = timezone.now().date()
+        date = timezone.localtime(timezone.now()).date()
         push_time = Profile.objects.get(user=self.request.user).push_time
         if push_time == 1:  # deadline
             return Task.objects.filter(user=self.request.user, deadline=date)
