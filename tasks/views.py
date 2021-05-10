@@ -91,7 +91,6 @@ class AddTaskView(LoginRequiredMixin, View):
     def post(self, request):
         title = self.request.POST.get('title')
         description = self.request.POST.get('description')
-        task_type = int(self.request.POST.get('type'))
 
         if self.request.POST.get('deadline_date'):
             deadline_date = timezone.datetime.strptime(self.request.POST.get('deadline_date'), '%Y-%m-%d')
@@ -106,7 +105,6 @@ class AddTaskView(LoginRequiredMixin, View):
         Task.objects.create(user=self.request.user,
                             name=title,
                             description=description,
-                            type=task_type,
                             deadline=timezone.datetime.combine(deadline_date, deadline_time) or timezone.localtime(timezone.now()))
         return redirect('list_view')
 
@@ -118,7 +116,8 @@ class EditTaskView(LoginRequiredMixin, View):
         pk = self.request.GET.get('id')
         task = Task.objects.get(id=pk)
         deadline_date = task.deadline.date().strftime('%Y-%m-%d')
-        deadline_time = task.deadline.time().strftime('%H:%M')
+        # TODO: fix this костыль со временем
+        deadline_time = (task.deadline + datetime.timedelta(hours=3)).strftime('%H:%M')
         return render(self.request, 'tasks/editTask.html', context={'task': task, 'deadline_date': deadline_date,
                                                                     'deadline_time': deadline_time})
 
@@ -126,7 +125,6 @@ class EditTaskView(LoginRequiredMixin, View):
         task = get_object_or_404(Task, id=pk)
         task.name = self.request.POST.get('title')
         task.description = self.request.POST.get('description')
-        # task.type = int(self.request.POST.get('type'))
 
         if self.request.POST.get('deadline_date'):
             deadline_date = timezone.datetime.strptime(self.request.POST.get('deadline_date'), '%Y-%m-%d')
