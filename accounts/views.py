@@ -21,8 +21,10 @@ class SettingsView(View):
         return render(self.request, 'accounts/settings.html', context=context)
 
     def post(self, request):
-
+        print(self.request.POST)
         form = SettingsForm(self.request.POST)
+        print(form)
+        print(form.is_valid())
         if form.is_valid():
             services.apply_changes(self.request, form)
 

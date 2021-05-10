@@ -9,7 +9,7 @@
 
         <title>{% block title %} Planner {% endblock title %}</title>
 	</head>
-	<body>
+	<body style="{% if user.is_authenticated and user.profile.theme == 2 %} background: lightgray {% endif %}">
 
 		{% block header %}
 
@@ -24,14 +24,14 @@
         {% endif %}
 
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'list_view' %}">Planner</a>
+                <a class="navbar-brand {% if user.is_authenticated and user.profile.theme == 2 %} text-white {% endif %}" href="{% url 'list_view' %}">Planner</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'list_view' %}">Home</a>
+                            <a class="nav-link active {% if user.is_authenticated and user.profile.theme == 2 %} text-white {% endif %}" aria-current="page" href="{% url 'list_view' %}">Home</a>
                         </li>
                     </ul>
                     <span class="navbar-text">
@@ -60,12 +60,10 @@
                 </div>
             </div>
         </nav>
-        <br>
-
 
 		{% endblock header%}
 
-        <div id="content" style="padding-bottom: 80px;">
+        <div id="content" style="padding-bottom: 80px; padding-top: 15px">
 		{% block content %}
             Content
 		{% endblock content %}
@@ -83,8 +81,8 @@
 
         {% endif %}
 
-			<div class="container-fluid text-center">
-				Planner © 2021 Group2Inc
+			<div class="container-fluid text-center {% if user.is_authenticated and user.profile.theme == 2 %} text-white {% endif %}">
+                Planner © 2021 Group2Inc
 			</div>
 		</footer>
 

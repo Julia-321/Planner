@@ -36,41 +36,31 @@
         <form action="{% url 'settings' %}" method="post">
 
             {% csrf_token %}
-            <div class="container text-center">
-                <div class="mb-3 row justify-content-md-center">
-                    <label for="notificationOption" class="col-sm-2 col-form-label">Notification option</label>
-                    <div class="col-sm-2">
-                        <div class="centered-option-block">
-                            {{ form.notification_option }}
-                        </div>
-                    </div>
+            <div class="container">
+                <div class="mb-3">
+                    <label for="id_notification_option" class="form-label">Notification option</label>
+                    <select class="form-select" name='notification_option' id="id_notification_option">
+                        <option selected value="1"> Push </option>
+{#                        <option value="2"> Email </option>#}
+{#                        <option value="3"> Both </option>#}
+                    </select>
                 </div>
 
-                <div class="mb-3 row justify-content-md-center">
-                    <label for="homeView" class="col-sm-2 col-form-label">Home view</label>
-                    <div class="col-sm-2">
-                        <div class="centered-option-block">
-                            {{ form.home_view }}
-                        </div>
-                    </div>
+                <div class="mb-3">
+                    <label for="id_home_view" class="col-sm-2 col-form-label">Home view</label>
+                    <select class="form-select" name='home_view' id="id_home_view">
+                        <option selected value="1"> Daily </option>
+                        <option value="2"> Weekly </option>
+                        <option value="3"> Monthly </option>
+                    </select>
                 </div>
 
-                <div class="mb-3 row justify-content-md-center">
-                    <label for="theme" class="col-sm-2 col-form-label">Theme</label>
-                    <div class="col-sm-2">
-                        <div class="centered-option-block">
-                            {{ form.theme }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-3 row justify-content-md-center">
-                    <label for="dateView" class="col-sm-2 col-form-label">Date view</label>
-                    <div class="col-sm-2">
-                        <div class="centered-option-block">
-                            {{ form.date_view }}
-                        </div>
-                    </div>
+                <div class="mb-3">
+                    <label for="id_theme" class="col-sm-2 col-form-label">Theme</label>
+                    <select class="form-select" name='theme' id="id_theme">
+                        <option selected value="1"> Light </option>
+                        <option value="2"> Dark </option>
+                    </select>
                 </div>
 
                 <input type="submit" class="btn btn-secondary" value="Save">
