@@ -1,8 +1,12 @@
+import datetime
+from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from accounts.models import Profile
 from tasks.forms import *
 from tasks import services
 from accounts.consts import HOME_PAGE_DICT
@@ -28,42 +32,53 @@ class ShowTasks(LoginRequiredMixin, View):
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
     def post(self, request, year, month, day):
-        # print(self.request.POST)
-        # year = timezone.now().year
-        # month = timezone.now().month
-        # day = timezone.now().day
-        kwargs = {'year': year, 'month': month, 'day': day}
 
+        kwargs = {'year': year, 'month': month, 'day': day}
+        cur_date = datetime.date(year=year, month=month, day=day)
         print(request.POST)
 
         if 'daily' in self.request.POST or request.POST.get('cur') == 'Daily':
             self.request.session['checked'] = 'Daily'
 
             if 'next' in request.POST:
-                # todo function add_day(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day + 1}
+                res_date = cur_date + relativedelta(days=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_day(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day - 1}
+                res_date = cur_date + relativedelta(days=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' in request.POST or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
 
             return redirect(reverse('show_tasks_daily', kwargs=kwargs))
         elif 'weekly' in self.request.POST or request.POST.get('cur') == 'Weekly':
             self.request.session['checked'] = 'Weekly'
             if 'next' in request.POST:
-                # todo function add_week(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day + 7}
+                res_date = cur_date + relativedelta(weeks=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_week(year, month, day)
-                kwargs = {'year': year, 'month': month, 'day': day - 7}
+                res_date = cur_date + relativedelta(weeks=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' in request.POST or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
+
             return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
         elif 'monthly' in self.request.POST or request.POST.get('cur') == 'Monthly':
             self.request.session['checked'] = 'Monthly'
             if 'next' in request.POST:
-                # todo function add_month(year, month, day)
-                kwargs = {'year': year, 'month': month + 1, 'day': day}
+                res_date = cur_date + relativedelta(months=+1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
             if 'prev' in request.POST:
-                # todo function sub_month(year, month, day)
-                kwargs = {'year': year, 'month': month - 1, 'day': day}
+                res_date = cur_date + relativedelta(months=-1)
+                kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' in request.POST or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
+
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
 
@@ -154,3 +169,19 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
         }
         return render(self.request, 'tasks/monthly.html', context=context)
+
+
+class PushView(LoginRequiredMixin, View):
+    login_url = 'accounts/login'
+
+    def get(self, request):
+        date = timezone.now().date()
+        push_time = Profile.objects.get(user=self.request.user).push_time
+        if push_time == 1:  # deadline
+            return Task.objects.filter(user=self.request.user, deadline=date)
+        elif push_time == 2:  # 15 min
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(minutes=15))
+        elif push_time == 3:  # 1 hour
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(hours=1))
+        else:  # push_time == 4:  # 1 min
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(minutes=1))
