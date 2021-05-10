@@ -5,6 +5,14 @@
 
 {% block content %}
 
+    <style>
+        .fixed-button {
+            position: fixed;
+            bottom: 70px;
+            right: 10px;
+        }
+    </style>
+
     {% include 'tasks/nav_tasks.html' %}
     {% include 'tasks/nav_dates.html' %}
 
@@ -74,14 +82,9 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <div>
-                                <a class="btn btn-light w-100" href="/tasks/add"> Add a new task </a>
-                            </div>
                         {% else %}
                             <div class="col scroll h-100 text-center">
-                                <div>
-                                    <a class="btn btn-light w-100" href="/tasks/add" style="margin-top: 10px"> Add a new task </a>
-                                </div>
+
                             </div>
                         {% endif %}
                     </div>
@@ -90,5 +93,6 @@
         </div>
     </div>
 
-    </div>
+    <a href="/tasks/add" class="fixed-button btn btn-outline-secondary">Add task</a>
+
 {% endblock %}

@@ -5,6 +5,14 @@
 
 {% block content %}
 
+    <style>
+    .fixed-button {
+            position: fixed;
+            bottom: 70px;
+            right: 10px;
+        }
+    </style>
+
     {% include 'tasks/nav_tasks.html' %}
     {% include 'tasks/nav_dates.html' %}
 
@@ -51,9 +59,7 @@
             </div>
         {% endif %}
 
-        <div style="margin-left: 10px">
-            <a class="btn btn-light btn-lg" href="/tasks/add"> Add a new task </a>
-        </div>
-
     </div>
+
+    <a href="/tasks/add" class="fixed-button btn btn-outline-secondary">Add task</a>
 {% endblock %}

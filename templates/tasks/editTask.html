@@ -22,8 +22,13 @@
             </div>
 
             <div class="mb-3">
-                <label for="id_deadline" class="form-label"><b>Deadline</b></label>
-                <input type="date" class="form-control" id="id_deadline" name="deadline" value="{{ task.deadline }}">
+                <label for="id_deadline_date" class="form-label"><b>Deadline date</b></label>
+                <input type="date" class="form-control" id="id_deadline_date" name="deadline_date" value="{{ deadline_date }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="id_deadline_time" class="form-label"><b>Deadline time</b></label>
+                <input type="time" class="form-control" id="id_deadline_time" name="deadline_time" value="{{ deadline_time }}">
             </div>
 
             <input type="hidden" name="id" value="{{ task_id }}">
