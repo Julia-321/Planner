@@ -2,7 +2,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -82,41 +82,77 @@ class ShowTasks(LoginRequiredMixin, View):
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
 
-class AddTask(LoginRequiredMixin, View):
+class AddTaskView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
-        form = CreateTaskForm()
-        return render(self.request, 'tasks/addTaskForm.html', context={'form': form})
+        return render(self.request, 'tasks/addTaskForm.html')
 
     def post(self, request):
-        formData = CreateTaskForm(request.POST)
-        if formData.is_valid():
-            task = formData.save(commit=False)
-            task.user = self.request.user
-            print(task.name, task.deadline)
-            task.save()
-        else:
-            print('FORM NOT VALID')
-        return HttpResponseRedirect('/tasks')
+        title = self.request.POST.get('title')
+        description = self.request.POST.get('description')
+        task_type = int(self.request.POST.get('type'))
+        deadline = self.request.POST.get('deadline') or timezone.now()
+        Task.objects.create(user=self.request.user,
+                            name=title,
+                            description=description,
+                            type=task_type,
+                            deadline=deadline)
+        return redirect('list_view')
 
 
-class EditTask(LoginRequiredMixin, View):
+class EditTaskView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request):
-        form = EditTaskForm(instance=Task.objects.get(id=request.GET['id']))
-        return render(self.request, 'tasks/editTaskForm.html', context={'form': form, 'task_id': request.GET['id']})
+        pk = self.request.GET.get('id')
+        return render(self.request, 'tasks/editTaskForm.html', context={'task': Task.objects.get(id=pk)})
 
-    def post(self, request):
-        formData = EditTaskForm(self.request.POST)
-        if formData.is_valid():
-            task = Task.objects.get(id=self.request.POST['id'])
-            task.name = formData.cleaned_data['name']
-            task.description = formData.cleaned_data['description']
-            task.deadline = formData.cleaned_data['deadline']
-            task.save()
-        return HttpResponseRedirect('/tasks')
+    def post(self, request, pk):
+        task = get_object_or_404(Task, id=pk)
+        task.name = self.request.POST.get('title')
+        task.description = self.request.POST.get('description')
+        # task.type = int(self.request.POST.get('type'))
+        task.deadline = self.request.POST.get('deadline') or timezone.now()
+        task.save()
+        return redirect('list_view')
+
+
+# class AddTask(LoginRequiredMixin, View):
+#     login_url = '/accounts/login/'
+#
+#     def get(self, request):
+#         form = CreateTaskForm()
+#         return render(self.request, 'tasks/addTaskForm.html', context={'form': form})
+#
+#     def post(self, request):
+#         formData = CreateTaskForm(request.POST)
+#         if formData.is_valid():
+#             task = formData.save(commit=False)
+#             task.user = self.request.user
+#             print(task.name, task.deadline)
+#             task.save()
+#         else:
+#             print('FORM NOT VALID')
+#         return HttpResponseRedirect('/tasks')
+
+
+# class EditTask(LoginRequiredMixin, View):
+#     login_url = '/accounts/login/'
+#
+#     def get(self, request):
+#         form = EditTaskForm(instance=Task.objects.get(id=request.GET['id']))
+#         return render(self.request, 'tasks/editTaskForm.html', context={'form': form, 'task_id': request.GET['id']})
+#
+#     def post(self, request):
+#         formData = EditTaskForm(self.request.POST)
+#         if formData.is_valid():
+#             task = Task.objects.get(id=self.request.POST['id'])
+#             task.name = formData.cleaned_data['name']
+#             task.description = formData.cleaned_data['description']
+#             task.deadline = formData.cleaned_data['deadline']
+#             task.save()
+#         return HttpResponseRedirect('/tasks')
 
 
 class DeleteTask(LoginRequiredMixin, View):

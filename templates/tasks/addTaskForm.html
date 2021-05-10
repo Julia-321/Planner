@@ -13,30 +13,30 @@
 
         <div class="container">
             <div class="mb-3">
-                <label for="id_name" class="form-label"><b> {{ form.name.label_tag }}</b></label>
-                <input type="text" class="form-control" id="id_name" maxlength="150" placeholder="Task name">
+                <label for="id_name" class="form-label"><b>Title</b></label>
+                <input type="text" required="required" class="form-control" id="id_name" maxlength="150" placeholder="Title" name="title">
             </div>
 
             <div class="mb-3">
-                <label for="id_description" class="form-label"> <b> {{ form.description.label_tag }}</b> </label>
-                <textarea class="form-control" id="id_description" rows="3" maxlength="500" placeholder="Description"></textarea>
+                <label for="id_description" class="form-label"> <b> Description </b> </label>
+                <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description" placeholder="Description"></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="id_type" class="form-label"> <b> {{ form.type.label_tag }}</b> </label>
-                <select class="form-select" id="id_type">
-                    {% for option in form.type %}
-                        {{ option }}
-                    {% endfor %}
+                <label for="id_type" class="form-label"> <b> Type </b> </label>
+                <select class="form-select" id="id_type" name="type">
+                    <option selected value="1"> Task </option>
+                    <option value="0"> Event </option>
+
                 </select>
             </div>
 
             <div class="mb-3">
-                <label for="id_deadline" class="form-label"><b>{{ form.deadline.label_tag }}</b></label>
-                <input type="date" class="form-control" id="id_deadline" value="{{ form.deadline.value }}">
+                <label for="id_deadline" class="form-label"><b>Deadline</b></label>
+                <input type="date" class="form-control" id="id_deadline" name="deadline">
             </div>
 
-            <input type="hidden" name="id" value="{{ task_id }}">
+{#            <input type="hidden" name="id" value="{{ task_id }}">#}
 
             <div class="text-center">
                 <input type="submit" class="align-center btn btn-secondary w-25" value="Save">
