@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from accounts.models import Profile
 from tasks.forms import *
 from tasks import services
 from accounts.consts import HOME_PAGE_DICT
@@ -54,7 +56,7 @@ class ShowTasks(LoginRequiredMixin, View):
             if 'prev' in request.POST:
                 res_date = cur_date + relativedelta(days=-1)
                 kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
-            if 'complete' or 'incomplete' in request.POST:
+            if 'complete' in request.POST or 'incomplete' in request.POST:
                 task = Task.objects.get(id=int(request.POST.get('complete_id')))
                 task.complete = not task.complete
                 task.save()
@@ -68,6 +70,11 @@ class ShowTasks(LoginRequiredMixin, View):
             if 'prev' in request.POST:
                 res_date = cur_date + relativedelta(weeks=-1)
                 kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' in request.POST or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
+
             return redirect(reverse('show_tasks_weekly',  kwargs=kwargs))
         elif 'monthly' in self.request.POST or request.POST.get('cur') == 'Monthly':
             self.request.session['checked'] = 'Monthly'
@@ -77,6 +84,10 @@ class ShowTasks(LoginRequiredMixin, View):
             if 'prev' in request.POST:
                 res_date = cur_date + relativedelta(months=-1)
                 kwargs = {'year': res_date.year, 'month': res_date.month, 'day': res_date.day}
+            if 'complete' in request.POST or 'incomplete' in request.POST:
+                task = Task.objects.get(id=int(request.POST.get('complete_id')))
+                task.complete = not task.complete
+                task.save()
             return redirect(reverse('show_tasks_monthly',  kwargs=kwargs))
 
 
@@ -167,3 +178,18 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
         }
         return render(self.request, 'tasks/monthly.html', context=context)
 
+
+class PushView(LoginRequiredMixin, View):
+    login_url = 'accounts/login'
+
+    def get(self, request):
+        date = timezone.now().date()
+        push_time = Profile.objects.get(user=self.request.user).push_time
+        if push_time == 1:  # deadline
+            return Task.objects.filter(user=self.request.user, deadline=date)
+        elif push_time == 2:  # 15 min
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(minutes=15))
+        elif push_time == 3:  # 1 hour
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(hours=1))
+        else:  # push_time == 4:  # 1 min
+            return Task.objects.filter(user=self.request.user, deadline=date+timezone.timedelta(minutes=1))
