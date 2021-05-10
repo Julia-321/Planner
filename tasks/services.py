@@ -1,6 +1,7 @@
 from datetime import timedelta
 from tasks.models import Task
 from django.utils import timezone
+from accounts.consts import DAYS, MONTHS
 
 
 def get_tasks_daily(request, date):
@@ -18,8 +19,14 @@ def get_tasks_weekly(request, date):
 
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
                                 deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
+    # res = [ (day, date, queryset), ... ]
+    res = []
 
-    return tasks
+    cur: timezone.datetime.date = start
+    for day in DAYS:
+        res += [(day, f'{MONTHS[cur.month - 1]} {cur.day}', tasks.filter(deadline__day=cur.day))]
+        cur += timedelta(days=1)
+    return res
 
 
 def get_tasks_monthly(request, date):
@@ -30,7 +37,13 @@ def get_tasks_monthly(request, date):
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
                                 deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
 
-    return tasks
+    cur = start
+    res = []
+    while cur <= end:
+        res += [(DAYS[cur.weekday()], f'{MONTHS[cur.month - 1]} {cur.day}', tasks.filter(deadline__day=cur.day))]
+        cur += timedelta(days=1)
+
+    return res
 
 
 def get_date_obj(year: int, month: int, day: int) -> timezone.datetime.date:
