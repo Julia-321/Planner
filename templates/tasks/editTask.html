@@ -21,7 +21,7 @@
             <div class="mb-3">
                 <div class="p-2">
                     <label for="id_description" class="form-label"> <b> Description </b> </label>
-                    <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description"> {{ task.description }} </textarea>
+                    <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description">{{ task.description }}</textarea>
                 </div>
             </div>
 
@@ -43,6 +43,7 @@
                     <div class="p-2 w-25">
                         <input type="submit" class="align-center btn btn-secondary w-100" value="Save">
                     </div>
+                </div>
             </div>
 
             <input type="hidden" name="id" value="{{ task_id }}">
