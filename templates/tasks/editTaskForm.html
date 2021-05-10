@@ -7,23 +7,23 @@
 {% block content %}
     <h3 style="margin-left: 10px">Edit task</h3>
 
-    <form action="{% url "edit_task" %}" method="post">
+    <form action="{% url "edit_task"  task.id %}" method="post">
         {% csrf_token %}
 
         <div class="container">
             <div class="mb-3">
-                <label for="id_name" class="form-label"><b> {{ form.name.label_tag }}</b></label>
-                <input type="text" class="form-control" id="id_name" value="{{ form.name.value }}" maxlength="150">
+                <label for="id_name" class="form-label"><b> Title </b></label>
+                <input type="text" class="form-control" id="id_name" value="{{ task.name }}" maxlength="150" name="title">
             </div>
 
             <div class="mb-3">
-                <label for="id_description" class="form-label"> <b> {{ form.description.label_tag }}</b> </label>
-                <textarea class="form-control" id="id_description" rows="3" maxlength="500"> {{ form.description.value }} </textarea>
+                <label for="id_description" class="form-label"> <b> Description </b> </label>
+                <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description"> {{ task.description }} </textarea>
             </div>
 
             <div class="mb-3">
-                <label for="id_deadline" class="form-label"><b>{{ form.deadline.label_tag }}</b></label>
-                <input type="date" class="form-control" id="id_deadline" value="{{ form.deadline.value }}">
+                <label for="id_deadline" class="form-label"><b>Deadline</b></label>
+                <input type="date" class="form-control" id="id_deadline" name="deadline" value="{{ task.deadline }}">
             </div>
 
             <input type="hidden" name="id" value="{{ task_id }}">
