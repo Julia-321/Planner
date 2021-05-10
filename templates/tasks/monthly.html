@@ -8,14 +8,6 @@
     {% include 'tasks/nav_tasks.html' %}
     {% include 'tasks/nav_dates.html' %}
 
-
-    <h3>Monthly tasks</h3>
-
-    <div>
-        <a href="/tasks/add"> Add a new task </a>
-
-    </div>
-
     <div class="container">
         <div class="accordion accordion-flush" id="accordionFlushExample">
             {% for task in tasks %}
@@ -64,5 +56,10 @@
                 </div>
             {% endfor %}
         </div>
+
+        <div>
+            <a class="btn btn-light" href="/tasks/add"> Add a new task </a>
+        </div>
+
     </div>
 {% endblock %}
