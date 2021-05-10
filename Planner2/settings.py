@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tasks.apps.TasksConfig',
     'accounts.apps.AccountsConfig',
-    'webpush',
 ]
 
 MIDDLEWARE = [

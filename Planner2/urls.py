@@ -23,7 +23,6 @@ from Planner2.views import not_implemented
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^webpush/', include('webpush.urls')),
     path('tasks/', include('tasks.urls')),
     path('accounts/register/',
          RegistrationView.as_view(),
