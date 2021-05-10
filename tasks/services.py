@@ -45,7 +45,7 @@ def get_tasks_monthly(request, date):
     #     cur += timedelta(days=1)
     res = Calendar().monthdayscalendar(today.year, today.month)
 
-    return list(map(lambda item: list(map(lambda x: (x, tasks.filter(deadline__day=x)) if x else x, item)), res))
+    return list(map(lambda item: list(map(lambda x: (x, tasks.filter(deadline__day=x)) if x else (x, []), item)), res))
 
 
 def get_date_obj(year: int, month: int, day: int) -> timezone.datetime.date:
