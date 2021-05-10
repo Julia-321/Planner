@@ -1,26 +1,26 @@
-<div class="d-flex flex-row-reverse">
-
-
-
-    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+<div class="d-flex flex-row">
+    <div class="p-2 w-100">
 
         <form method="post" action='{% url 'list_view' year=date.year month=date.month day=date.day %}'>
             {% csrf_token %}
-            <button type="submit"  class="btn btn-primary {% if checked == 'Daily' %} active {% endif %}" name="daily"> Daily </button>
+            <button type="submit"  class="w-100 btn btn-outline-secondary {% if checked == 'Daily' %} active {% endif %}" name="daily"> Daily </button>
         </form>
+    </div>
 
+    <div class="p-2 w-100">
         <form method="post" action='{% url 'list_view' year=date.year month=date.month day=date.day %}'>
             {% csrf_token %}
 
-            <button type="submit" class="btn btn-primary {% if checked == 'Weekly' %} active {% endif %}" name="weekly"> Weekly </button>
+            <button type="submit" class="w-100 btn btn-outline-secondary {% if checked == 'Weekly' %} active {% endif %}" name="weekly"> Weekly </button>
         </form>
+    </div>
 
+    <div class="p-2 w-100">
         <form method="post" action='{% url 'list_view' year=date.year month=date.month day=date.day %}'>
             {% csrf_token %}
 
-            <button type="submit"  class="btn btn-primary {% if checked == 'Monthly' %} active {% endif %}" name="monthly"> Monthly </button>
+            <button type="submit"  class="w-100 btn btn-outline-secondary {% if checked == 'Monthly' %} active {% endif %}" name="monthly"> Monthly </button>
         </form>
-
     </div>
 
 </div>
