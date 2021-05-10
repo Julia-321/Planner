@@ -7,7 +7,7 @@ def get_tasks_daily(request, date):
 
     today = date
     tasks = Task.objects.filter(user=request.user, deadline__year=today.year,
-                                deadline__day=today.day).order_by('deadline')
+                                deadline__day=today.day).order_by('complete', 'deadline')
     return tasks
 
 
@@ -17,7 +17,7 @@ def get_tasks_weekly(request, date):
     end = start + timedelta(days=6)  # the last day of the current week
 
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
-                                deadline__day__range=[start.day, end.day]).order_by('deadline')
+                                deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
 
     return tasks
 
@@ -28,7 +28,7 @@ def get_tasks_monthly(request, date):
     end = today.replace(day=1).replace(month=today.month+1) - timedelta(days=1)
 
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
-                                deadline__day__range=[start.day, end.day]).order_by('deadline')
+                                deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
 
     return tasks
 
