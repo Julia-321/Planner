@@ -220,6 +220,7 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
 
     def get(self, request, year, month, day):
+        print(self.request)
         cur_date = services.get_date_obj(year, month, day)
 
         tasks = services.get_tasks_monthly(self.request, cur_date)

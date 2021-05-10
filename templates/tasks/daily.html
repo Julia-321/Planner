@@ -26,7 +26,7 @@
                 <div class="card w-100" style="margin-bottom: 10px">
                     <div class="card-header align-middle"> <h5>{{ task.name }}</h5> </div>
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted"> <b>Due to: </b> {{ task.deadline }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted"> <b>Due to: </b> {{ task.deadline.time }}</h6>
                         <p class="card-text">{{ task.description }}</p>
 
                         <div class="d-flex flex-row-reverse justify-content-between">

@@ -3,6 +3,7 @@ from tasks.models import Task
 from django.utils import timezone
 from accounts.consts import DAYS, MONTHS
 from calendar import Calendar
+from dateutil.relativedelta import relativedelta
 
 
 def get_tasks_daily(request, date):
@@ -31,9 +32,11 @@ def get_tasks_weekly(request, date):
 
 
 def get_tasks_monthly(request, date):
+    print('---------------------------------')
     today = date
     start = today.replace(day=1)
-    end = today.replace(day=1).replace(month=today.month+1) - timedelta(days=1)
+    print('-------------', request, date)
+    end = (today + relativedelta(months=+1)).replace(day=1) - timedelta(days=1)
 
     tasks = Task.objects.filter(user=request.user, deadline__year=start.year, deadline__month=start.month,
                                 deadline__day__range=[start.day, end.day]).order_by('complete', 'deadline')
