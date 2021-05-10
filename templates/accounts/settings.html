@@ -2,11 +2,6 @@
 
 {% block content %}
     <style>
-    .centered-option-block {
-        padding-top: calc(.375rem + 1px);
-        padding-bottom: calc(.375rem + 1px);
-    }
-
     #id_notification_option {
         width: 100%;
     }
@@ -14,9 +9,6 @@
         width: 100%;
     }
     #id_theme {
-        width: 100%;
-    }
-    #id_date_view {
         width: 100%;
     }
 
@@ -39,7 +31,7 @@
             <div class="container">
                 <div class="mb-3">
                     <label for="id_notification_option" class="form-label">Notification option</label>
-                    <select class="form-select" name='notification_option' id="id_notification_option">
+                    <select class="form-select" name='notification_option' id="id_notification_option" multiple>
                         <option selected value="1"> Push </option>
 {#                        <option value="2"> Email </option>#}
 {#                        <option value="3"> Both </option>#}
@@ -48,18 +40,18 @@
 
                 <div class="mb-3">
                     <label for="id_home_view" class="col-sm-2 col-form-label">Home view</label>
-                    <select class="form-select" name='home_view' id="id_home_view">
-                        <option selected value="1"> Daily </option>
-                        <option value="2"> Weekly </option>
-                        <option value="3"> Monthly </option>
+                    <select class="form-select" name='home_view' id="id_home_view" multiple>
+                        <option {% if home_view == 1 %} selected {% endif %} value="1"> Daily </option>
+                        <option {% if home_view == 2 %} selected {% endif %} value="2"> Weekly </option>
+                        <option {% if home_view == 3 %} selected {% endif %} value="3"> Monthly </option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="id_theme" class="col-sm-2 col-form-label">Theme</label>
-                    <select class="form-select" name='theme' id="id_theme">
-                        <option selected value="1"> Light </option>
-                        <option value="2"> Dark </option>
+                    <select class="form-select" name='theme' id="id_theme" multiple>
+                        <option {% if theme == 1 %} selected {% endif %} value="1"> Light </option>
+                        <option {% if theme == 2 %} selected {% endif %} value="2"> Dark </option>
                     </select>
                 </div>
 

@@ -16,21 +16,25 @@ class SettingsView(View):
     def get(self, request):
         context = {
             'form': SettingsForm(),
-            'saved': False
+            'saved': False,
+            'notification_option': self.request.user.profile.notification_option,
+            'home_view': self.request.user.profile.home_view,
+            'theme': self.request.user.profile.theme,
         }
+        print(context)
         return render(self.request, 'accounts/settings.html', context=context)
 
     def post(self, request):
-        print(self.request.POST)
         form = SettingsForm(self.request.POST)
-        print(form)
-        print(form.is_valid())
         if form.is_valid():
             services.apply_changes(self.request, form)
 
         context = {
             'form': SettingsForm(),
-            'saved': form.is_valid()
+            'saved': form.is_valid(),
+            'notification_option': self.request.user.profile.notification_option,
+            'home_view': self.request.user.profile.home_view,
+            'theme': self.request.user.profile.theme,
         }
 
         return render(self.request, 'accounts/settings.html', context=context)
