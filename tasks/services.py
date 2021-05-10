@@ -4,10 +4,11 @@ from django.utils import timezone
 from accounts.consts import DAYS, MONTHS
 from calendar import Calendar
 
+
 def get_tasks_daily(request, date):
 
     today = date
-    tasks = Task.objects.filter(user=request.user, deadline__year=today.year,
+    tasks = Task.objects.filter(user=request.user, deadline__year=today.year, deadline__month=today.month,
                                 deadline__day=today.day).order_by('complete', 'deadline')
     return tasks
 

@@ -167,7 +167,7 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
             'date': cur_date,
             'tasks': tasks,
             'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view]),
-            'month_name': MONTHS[month - 1]
+            'month_name': MONTHS[month - 1],
         }
         return render(self.request, 'tasks/monthly.html', context=context)
 

@@ -9,47 +9,86 @@
     {% include 'tasks/nav_dates.html' %}
 
     <div class="container">
-        {% if tasks %}
-            {% for task in tasks %}
-                <div class="card w-100" style="margin-bottom: 10px">
-                    <div class="card-body">
-                        <h5 class="card-title" id="flush-heading{{ task.id }}">{{ task.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ task.deadline }}</h6>
-                        <p class="card-text">{{ task.description }}</p>
+        <div class="row">
+            {% for day, cur_date, queryset in tasks %}
+                <div class="col" style="width: 13%">
 
-                        <div class="d-flex flex-row-reverse justify-content-between">
-                            <div class="p-2">
-                                <form method="post" action='{% url 'list_view' year=date.year month=date.month day=date.day %}'>
-                                    {% csrf_token %}
-
-                                    <input type="hidden" name="cur" value="{{ checked }}">
-                                    <input type="hidden" name="complete_id" value="{{ task.id }}">
-
-                                    {% if not task.complete %}
-                                        <button type="submit" class="btn btn-secondary" name="incomplete">Incomplete</button>
-                                    {% else %}
-                                        <button type="submit" class="btn btn-success" name="complete"> Complete </button>
-                                    {% endif %}
-
-                                </form>
-                            </div>
-                            <div class="p-2">
-                                <a class="btn btn-danger" href="/tasks/delete/?id={{ task.id }}">delete</a>
-                                <a class="btn btn-light" href="/tasks/edit/?id={{ task.id }}">edit</a>
-                            </div>
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-header text-center"> <b>{{ day }}</b> </div>
+                            <div class="card-body text-center text-muted"> <p style="font-size: 10pt">{{ cur_date }}, {{ date.year }}</p> </div>
                         </div>
+                    </div>
+
+                    <div class="row overflow-auto">
+                        {% if queryset %}
+                            {% for task in queryset %}
+                                <div class="card overflow-auto" style="margin-top: 10px; margin-bottom: 10px">
+                                    <div class="card-header text-center"> {{ task.name }}
+                                        {% if task.complete %}
+                                            <span class="badge rounded-pill bg-success">Complete</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ task.id }}">
+                                            More
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdrop{{ task.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <form method="post" action='{% url 'list_view' year=date.year month=date.month day=date.day %}'>
+                                                {% csrf_token %}
+                                                <input type="hidden" name="cur" value="{{ checked }}">
+                                                <input type="hidden" name="complete_id" value="{{ task.id }}">
+
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel{{ task.id }}">{{ task.name }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h6 class="card-subtitle mb-2 text-muted"> <b>Due to: </b> {{ task.deadline }}</h6>
+                                                            <p class="card-text"> {{ task.description }}</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="d-flex flex-row justify-content-between w-100">
+                                                                <div class="p-2">
+                                                                    <a class="btn btn-danger" href="/tasks/delete/?id={{ task.id }}">delete</a>
+                                                                    <a class="btn btn-light" href="/tasks/edit/?id={{ task.id }}">edit</a>
+                                                                </div>
+
+                                                                <div class="p-2">
+                                                                    {% if not task.complete %}
+                                                                        <button type="submit" class="btn btn-secondary" name="incomplete">Incomplete</button>
+                                                                    {% else %}
+                                                                        <button type="submit" class="btn btn-success" name="complete"> Complete </button>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div>
+                                <a class="btn btn-light w-100" href="/tasks/add"> Add a new task </a>
+                            </div>
+                        {% else %}
+                            <div class="col scroll h-100 text-center">
+                                <div>
+                                    <a class="btn btn-light w-100" href="/tasks/add" style="margin-top: 10px"> Add a new task </a>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
-        {% else %}
-            <div class="alert alert-success" role="alert">
-                There are no tasks!
-            </div>
-        {% endif %}
-
-        <div>
-            <a class="btn btn-light" href="/tasks/add"> Add a new task </a>
         </div>
+    </div>
 
     </div>
 {% endblock %}
