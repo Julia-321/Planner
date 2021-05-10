@@ -1,11 +1,10 @@
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from requests import Response
 
 from accounts.models import Profile
 from tasks.forms import *
