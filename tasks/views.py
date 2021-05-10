@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.models import Profile
 from tasks.forms import *
 from tasks import services
-from accounts.consts import HOME_PAGE_DICT
+from accounts.consts import HOME_PAGE_DICT, MONTHS
 from django.urls import reverse
 
 
@@ -166,7 +166,8 @@ class ShowTasksMonthly(LoginRequiredMixin, View):
         context = {
             'date': cur_date,
             'tasks': tasks,
-            'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view])
+            'checked': self.request.session.get('checked', default=HOME_PAGE_DICT[self.request.user.profile.home_view]),
+            'month_name': MONTHS[month - 1]
         }
         return render(self.request, 'tasks/monthly.html', context=context)
 
