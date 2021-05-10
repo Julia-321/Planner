@@ -5,7 +5,7 @@ from tasks.models import Task
 class CreateTaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'type', 'deadline']
+        fields = ['name', 'description', 'deadline']
         widgets = {'deadline': DateTimeInput}
 
 

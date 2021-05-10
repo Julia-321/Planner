@@ -13,39 +13,43 @@
 
         <div class="container">
             <div class="mb-3">
-                <label for="id_name" class="form-label"><b>Title</b></label>
-                <input type="text" required="required" class="form-control" id="id_name" maxlength="150" placeholder="Title" name="title">
+                <div class="p-2">
+                    <label for="id_name" class="form-label"><b>Title</b></label>
+                    <input type="text" required="required" class="form-control" id="id_name" maxlength="150" placeholder="Title" name="title">
+                </div>
             </div>
 
             <div class="mb-3">
-                <label for="id_description" class="form-label"> <b> Description </b> </label>
-                <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description" placeholder="Description"></textarea>
+                <div class="p-2">
+                    <label for="id_description" class="form-label"> <b> Description </b> </label>
+                    <textarea class="form-control" id="id_description" rows="3" maxlength="500" name="description" placeholder="Description"></textarea>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label for="id_type" class="form-label"> <b> Type </b> </label>
-                <select class="form-select" id="id_type" name="type">
-                    <option selected value="1"> Task </option>
-                    <option value="0"> Event </option>
+                <div class="d-flex align-items-end">
 
-                </select>
+                    <div class="p-2 w-25">
+                        <label for="id_deadline_date" class="form-label"><b>Deadline date</b></label>
+                        <input type="date" class="form-control" id="id_deadline_date" name="deadline_date">
+                    </div>
+
+                    <div class="p-2 w-25">
+                        <label for="id_deadline_time" class="form-label"><b>Deadline time</b></label>
+                        <input type="time" class="form-control" id="id_deadline_time" name="deadline_time">
+                    </div>
+
+                    <div class="p-2 w-25">
+                    </div>
+
+                    <div class="p-2 w-25">
+                        <input type="submit" class="align-center btn btn-secondary w-100" value="Save">
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="mb-3">
-                <label for="id_deadline_date" class="form-label"><b>Deadline date</b></label>
-                <input type="date" class="form-control" id="id_deadline_date" name="deadline_date">
-            </div>
-
-            <div class="mb-3">
-                <label for="id_deadline_time" class="form-label"><b>Deadline time</b></label>
-                <input type="time" class="form-control" id="id_deadline_time" name="deadline_time">
-            </div>
-
-{#            <input type="hidden" name="id" value="{{ task_id }}">#}
-
-            <div class="text-center">
-                <input type="submit" class="align-center btn btn-secondary w-25" value="Save">
-            </div>
 
         </div>
 
