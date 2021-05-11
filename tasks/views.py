@@ -91,7 +91,6 @@ class AddTaskView(LoginRequiredMixin, View):
     def post(self, request):
         title = self.request.POST.get('title')
         description = self.request.POST.get('description')
-        task_type = int(self.request.POST.get('type'))
 
         if self.request.POST.get('deadline_date'):
             deadline_date = timezone.datetime.strptime(self.request.POST.get('deadline_date'), '%Y-%m-%d')
@@ -200,14 +199,14 @@ class PushView(LoginRequiredMixin, View):
 
     def get(self, request):
         date = timezone.localtime(timezone.now())
-        er_time = timezone.timedelta(minutes=2)
+        er_time = timezone.timedelta(minutes=1)
         push_time = Profile.objects.get(user=self.request.user).push_time
 
         if push_time == 1:  # deadline
             data = (Task.objects.values('name', 'description', 'deadline').filter(user=self.request.user,
                                                                                   deadline__range=[date - er_time,
                                                                                                    date
-                                                                                                   + er_time]).first())
+                                                                                                   + er_time]).last())
         elif push_time == 2:  # 15 min
             data = (Task.objects.values('name', 'description', 'deadline').filter(user=self.request.user,
                                                                                   deadline__range=[
@@ -215,14 +214,14 @@ class PushView(LoginRequiredMixin, View):
                                                                                           minutes=15) - er_time,
                                                                                       date + timezone.timedelta(
                                                                                           minutes=15)
-                                                                                      + er_time]).first())
-        elif push_time == 3:  # 1 hourz
+                                                                                      + er_time]).last())
+        elif push_time == 3:  # 1 hour
             data = (Task.objects.values('name', 'description', 'deadline').filter(user=self.request.user,
                                                                                   deadline__range=[
                                                                                       date + timezone.timedelta(
                                                                                           hours=1) - er_time,
                                                                                       date + timezone.timedelta(
-                                                                                          hours=1) + er_time]).first())
+                                                                                          hours=1) + er_time]).last())
         else:  # push_time == 4:  # 1 min
             data = (Task.objects.values('name', 'description', 'deadline').filter(user=self.request.user,
                                                                                   deadline__range=[
@@ -230,7 +229,7 @@ class PushView(LoginRequiredMixin, View):
                                                                                           minutes=1) - er_time,
                                                                                       date + timezone.timedelta(
                                                                                           minutes=1)
-                                                                                      + er_time]).first())
+                                                                                      + er_time]).last())
         print(data)
 
         # data = Task.objects.values('name', 'description', 'deadline').last()
