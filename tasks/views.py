@@ -229,7 +229,6 @@ class PushView(LoginRequiredMixin, View):
                                                                                       date + timezone.timedelta(
                                                                                           minutes=1)
                                                                                       + er_time]).last())
-        print(data)
 
         # data = Task.objects.values('name', 'description', 'deadline').last()
         # data['deadline'] = data['deadline'].strftime("%H:%M")

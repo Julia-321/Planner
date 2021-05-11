@@ -10,5 +10,6 @@ def apply_changes(request, form: SettingsForm):
     profile.notification_option = cd['notification_option']
     profile.home_view = cd['home_view']
     profile.theme = cd['theme']
+    profile.push_time = cd['push_time']
 
     profile.save()

@@ -20,6 +20,7 @@ class SettingsView(View):
             'notification_option': self.request.user.profile.notification_option,
             'home_view': self.request.user.profile.home_view,
             'theme': self.request.user.profile.theme,
+            'push_time': self.request.user.profile.push_time,
         }
         print(context)
         return render(self.request, 'accounts/settings.html', context=context)
@@ -35,6 +36,7 @@ class SettingsView(View):
             'notification_option': self.request.user.profile.notification_option,
             'home_view': self.request.user.profile.home_view,
             'theme': self.request.user.profile.theme,
+            'push_time': self.request.user.profile.push_time,
         }
 
         return render(self.request, 'accounts/settings.html', context=context)

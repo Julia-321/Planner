@@ -55,6 +55,17 @@
                     </select>
                 </div>
 
+                <div class="mb-3">
+                    <label for="id_push_time" class="col-sm-2 col-form-label">Push time</label>
+                    <select class="form-select" name='push_time' id="id_push_time" multiple>
+                        <option {% if push_time == 1 %} selected {% endif %} value="1"> On deadline </option>
+                        <option {% if push_time == 4 %} selected {% endif %} value="4"> 1 minute before </option>
+                        <option {% if push_time == 2 %} selected {% endif %} value="2"> 15 minutes before </option>
+                        <option {% if push_time == 3 %} selected {% endif %} value="3"> 1 hour before  </option>
+
+                    </select>
+                </div>
+
                 <div class="text-center">
                     <input type="submit" class="btn btn-secondary" value="Save">
                 </div>
